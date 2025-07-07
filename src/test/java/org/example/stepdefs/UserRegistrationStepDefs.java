@@ -3,16 +3,25 @@ package org.example.stepdefs;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.example.services.EmailNotification;
-import org.example.services.NotificationService;
+import io.cucumber.spring.CucumberContextConfiguration;
 import org.example.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Objects;
 
+@CucumberContextConfiguration
+@ContextConfiguration(classes = org.example.config.TestConfig.class)
 public class UserRegistrationStepDefs {
     // This class defines the step definitions for user registration feature in Cucumber tests.
-    private final NotificationService notificationService = new EmailNotification();
-    private final UserService userService = new UserService(notificationService);
+    public UserRegistrationStepDefs() {
+        System.out.println("[LOG] UserRegistrationStepDefs constructor called.");
+    }
+//    @Autowired
+//    private NotificationService notificationService;
+    @Autowired
+    private UserService userService;
+
     private String userName;
     private String userType;
 

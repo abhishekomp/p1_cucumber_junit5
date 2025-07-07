@@ -4,6 +4,7 @@ public class UserService {
     private final NotificationService notificationService;
 
     public UserService(NotificationService notificationService) {
+        System.out.println("[LOG] UserService bean created with notificationService: " + notificationService.getClass());
         this.notificationService = notificationService;
     }
 
