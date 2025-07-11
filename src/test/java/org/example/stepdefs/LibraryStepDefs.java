@@ -1,7 +1,6 @@
 package org.example.stepdefs;
 
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -20,16 +19,11 @@ public class LibraryStepDefs {
     private int bookCount = 0;
     private Book foundBook;
     private Exception searchException;
-
-    @ParameterType("SCIENCE_FICTION|FANTASY|ADVENTURE|FICTION|DRAMA")
-    public Genre genre(String genre) {
-        System.out.println("[LOG] @ParameterType called with: " + genre);
-        return Genre.valueOf(genre);
-    }
+    private List<Book> foundBooks = new ArrayList<>();
 
     @When("I add a book with title {string} and genre {genre}")
     public void i_add_a_book_with_title_and_genre_science_fiction(String title, Genre genre) {
-        // Write code here that turns the phrase above into concrete actions
+        // Write code here that turns the phrase above into concrete actions.
         // For example, you might want to add the book to a library or database
         // This is a placeholder implementation
         //System.out.format("Adding book with title '%s' and genre '%s'.%n", string, genre(string));
@@ -41,7 +35,7 @@ public class LibraryStepDefs {
     @Then("the genre of book {string} should be {genre}")
     public void the_genre_of_book_should_be(String title, Genre expectedGenre) {
         System.out.printf("[LOG] Checking: %s ?= %s%n", bookGenres.get(title), expectedGenre);
-        // Write code here that turns the phrase above into concrete actions
+        // Write code here that turns the phrase above into concrete actions.
         // For example, you might want to check if the book's expectedGenre matches the expected expectedGenre
         assertEquals(expectedGenre, bookGenres.get(title),
                 String.format("Expected expectedGenre for book '%s' to be '%s', but found '%s'.", title, expectedGenre, bookGenres.get(title)));
@@ -108,7 +102,7 @@ public class LibraryStepDefs {
         if (!(searchException instanceof RuntimeException)) {
             throw new AssertionError("Expected a RuntimeException, but got: " + searchException.getClass().getSimpleName());
         }
-        String expectedMessage = "Book with title " + bookTitle + " not found.";
+        //String expectedMessage = "Book with title " + bookTitle + " not found.";
         if (!searchException.getMessage().contains(bookTitle)) {
             throw new AssertionError(
                     String.format("Expected exception message to contain '%s', but was '%s'.", bookTitle, searchException.getMessage())
@@ -127,5 +121,26 @@ public class LibraryStepDefs {
                 String.format("Expected %d titles in the table, but got %d.", expectedCount, expectedTitles.size()));
         assertEquals(expectedTitles, actualTitles,
                 String.format("Expected titles %s, but found %s.", expectedTitles, actualTitles));
+    }
+
+    @When("I search for books with genre {genre}")
+    public void i_search_for_books_with_genre(Genre genre) {
+        // Filter books by genre and store the result for assertion
+        foundBooks = libraryBooks.stream()
+                .filter(book -> book.getGenre() == genre)
+                .toList();
+    }
+
+    @Then("the following titles should be found:")
+    public void the_following_titles_should_be_found(List<String> expectedTitles) {
+        List<String> actualTitles = foundBooks.stream()
+                .map(Book::getTitle)
+                .toList();
+        // Remove empty expected titles (from empty cells in the Examples table)
+        List<String> filteredExpectedTitles = expectedTitles.stream()
+                .filter(title -> title != null && !title.isBlank())
+                .toList();
+        assertEquals(filteredExpectedTitles, actualTitles,
+                String.format("Expected titles %s, but found %s.", filteredExpectedTitles, actualTitles));
     }
 }
