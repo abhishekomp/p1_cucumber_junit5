@@ -1,6 +1,7 @@
-package org.example.stepdefs;
+package org.example.stepdefs.parameterTypes;
 
 import io.cucumber.java.ParameterType;
+import org.example.stepdefs.Genre;
 
 public class ParameterTypes {
 

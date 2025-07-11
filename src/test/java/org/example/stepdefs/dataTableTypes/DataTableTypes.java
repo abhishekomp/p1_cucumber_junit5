@@ -1,6 +1,8 @@
-package org.example.stepdefs;
+package org.example.stepdefs.dataTableTypes;
 
 import io.cucumber.java.DataTableType;
+import org.example.stepdefs.Book;
+import org.example.stepdefs.Genre;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
