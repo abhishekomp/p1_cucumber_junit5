@@ -1,0 +1,5 @@
+{
+  "transactionId": "TX1000",
+  "amount": 250.0,
+  "timestamp": "${json-unit.ignore}"
+}

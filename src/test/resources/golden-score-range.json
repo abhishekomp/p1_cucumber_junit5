@@ -1,0 +1,3 @@
+{
+  "score": "${json-unit.matches:rangeMatcher}10,20"
+}
